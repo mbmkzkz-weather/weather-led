@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.box {
+    text-align:center;
+}
+.city {
+    font-size:40px;
+}
+.temp {
+    font-size:120px;
+    font-weight:bold;
+}
+.desc {
+    font-size:50px;
+}
+</style>
+</head>
+
+<body>
+<div class="box">
+<div class="city">Мерке</div>
+<div class="temp" id="temp">--°</div>
+<div class="desc" id="desc">...</div>
+</div>
+
+<script>
+async function loadWeather(){
+let res = await fetch("https://wttr.in/Merke?format=j1");
+let data = await res.json();
+
+let t = data.current_condition[0].temp_C;
+let d = data.current_condition[0].weatherDesc[0].value;
+
+function simple(x){
+x = x.toLowerCase();
+if(x.includes("rain")) return "Дождь";
+if(x.includes("snow")) return "Снег";
+if(x.includes("thunder")) return "Гроза";
+if(x.includes("cloud")) return "Облачно";
+return "Ясно";
+}
+
+document.getElementById("temp").innerText = t + "°C";
+document.getElementById("desc").innerText = simple(d);
+}
+
+loadWeather();
+setInterval(loadWeather, 600000);
+</script>
+
+</body>
+</html>
